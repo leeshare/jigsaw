@@ -1,0 +1,14 @@
+#jigsaw
+
+.git
+*.swp
+*.iml
+.idea
+.gradle
+
+local.properties
+build/
+.DS_Store
+captures
+.externalNativeBuild
+
