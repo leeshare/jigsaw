@@ -7,8 +7,10 @@ import com.jfinal.config.JFinalConfig;
 import com.jfinal.config.Plugins;
 import com.jfinal.config.Routes;
 import com.jigsaw.controller.LoginController;
+import com.jigsaw.routes.AdminRoutes;
+import com.jigsaw.routes.FrontRoutes;
 
-public class LoginConfig extends JFinalConfig {
+public class AppConfig extends JFinalConfig {
 
 	@Override
 	public void configConstant(Constants me) {
@@ -20,6 +22,8 @@ public class LoginConfig extends JFinalConfig {
 	public void configRoute(Routes me) {
 		me.add("/login", LoginController.class);
 		
+		//me.add(new FrontRoutes());
+		//me.add(new AdminRoutes());
 	}
 
 	@Override
