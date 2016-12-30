@@ -6,6 +6,7 @@ import com.jfinal.config.Interceptors;
 import com.jfinal.config.JFinalConfig;
 import com.jfinal.config.Plugins;
 import com.jfinal.config.Routes;
+import com.jfinal.render.ViewType;
 import com.jigsaw.controller.LoginController;
 import com.jigsaw.routes.AdminRoutes;
 import com.jigsaw.routes.FrontRoutes;
@@ -15,7 +16,7 @@ public class AppConfig extends JFinalConfig {
 	@Override
 	public void configConstant(Constants me) {
 		me.setDevMode(true);
-		
+		me.setViewType(ViewType.JSP);
 	}
 
 	@Override
