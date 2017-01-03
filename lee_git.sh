@@ -1,7 +1,7 @@
-#!/bin/sh
+﻿#!/bin/sh
 
 echo "进入git目录"
-cd ~/MyWork/git/lee
+cd ~/MyWork/git/leeshare/jigsaw
 echo "fetch origin"
 git fetch origin
 echo "merge origin/master"
