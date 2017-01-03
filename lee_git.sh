@@ -6,8 +6,10 @@ echo "fetch origin"
 git fetch origin
 echo "merge origin/master"
 git merge origin/master
+git status
 echo "add *"
 git add *
+git status
 echo "commit -m ''"
 git commit -m "mac sth"
 echo "push -f origin master"
