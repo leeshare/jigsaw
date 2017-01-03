@@ -5,7 +5,7 @@ import com.jfinal.core.Controller;
 
 public class LoginController extends Controller {
 
-	//·ÃÎÊÂ·ÓÉÎª /login
+	//è®¿é—®è·¯ç”±ä¸º /login
 	public void index() {
 		//renderText("Hello JFinal World.");
 		
@@ -15,14 +15,14 @@ public class LoginController extends Controller {
 		renderJson(result);
 	}
 	
-	//·ÃÎÊÂ·ÓÉÎª /login1
+	//è®¿é—®è·¯ç”±ä¸º /login1
 	@ActionKey("/login1")
 	public void login(){
 		//render("login.html");
 		renderText("Hello JFinal World111.");
 	}
 	
-	//·ÃÎÊÂ·ÓÉÎª  /login/login2
+	//è®¿é—®è·¯ç”±ä¸º /login/login2
 	public void login2(){
 
 		renderText("Hello JFinal World22222.");

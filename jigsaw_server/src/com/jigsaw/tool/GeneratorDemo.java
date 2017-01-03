@@ -21,29 +21,29 @@ public class GeneratorDemo {
 	}
 	
 	public static void main(String[] args) {
-		// base model ËùÊ¹ÓÃµÄ°üÃû
+		// base model æ‰€ä½¿ç”¨çš„åŒ…å
 		String baseModelPackageName = "com.jigsaw.model.base";
-		// base model ÎÄ¼ş±£´æÂ·¾¶
+		// base model æ–‡ä»¶ä¿å­˜è·¯å¾„
 		String baseModelOutputDir = PathKit.getWebRootPath() + "/../src/com/jigsaw/model/base";
 		
-		// model ËùÊ¹ÓÃµÄ°üÃû (MappingKit Ä¬ÈÏÊ¹ÓÃµÄ°üÃû)
+		// model æ‰€ä½¿ç”¨çš„åŒ…å (MappingKit é»˜è®¤ä½¿ç”¨çš„åŒ…å)
 		String modelPackageName = "com.jigsaw.model";
-		// model ÎÄ¼ş±£´æÂ·¾¶ (MappingKit Óë DataDictionary ÎÄ¼şÄ¬ÈÏ±£´æÂ·¾¶)
+		// model æ–‡ä»¶ä¿å­˜è·¯å¾„ (MappingKit ä¸ DataDictionary æ–‡ä»¶é»˜è®¤ä¿å­˜è·¯å¾„)
 		String modelOutputDir = baseModelOutputDir + "/..";
 		
-		// ´´½¨Éú³ÉÆ÷
+		// åˆ›å»ºç”Ÿæˆå™¨
 		Generator gernerator = new Generator(getDataSource(), baseModelPackageName, baseModelOutputDir, modelPackageName, modelOutputDir);
-		// ÉèÖÃÊı¾İ¿â·½ÑÔ
+		// è®¾ç½®æ•°æ®åº“æ–¹è¨€
 		gernerator.setDialect(new MysqlDialect());
-		// Ìí¼Ó²»ĞèÒªÉú³ÉµÄ±íÃû
+		// æ·»åŠ ä¸éœ€è¦ç”Ÿæˆçš„è¡¨å
 		gernerator.addExcludedTable("adv");
-		// ÉèÖÃÊÇ·ñÔÚ Model ÖĞÉú³É dao ¶ÔÏó
+		// è®¾ç½®æ˜¯å¦åœ¨ Model ä¸­ç”Ÿæˆ dao å¯¹è±¡
 		gernerator.setGenerateDaoInModel(true);
-		// ÉèÖÃÊÇ·ñÉú³É×ÖµäÎÄ¼ş
+		// è®¾ç½®æ˜¯å¦ç”Ÿæˆå­—å…¸æ–‡ä»¶
 		gernerator.setGenerateDataDictionary(false);
-		// ÉèÖÃĞèÒª±»ÒÆ³ıµÄ±íÃûÇ°×ºÓÃÓÚÉú³ÉmodelName¡£ÀıÈç±íÃû "osc_user"£¬ÒÆ³ıÇ°×º "osc_"ºóÉú³ÉµÄmodelÃûÎª "User"¶ø·Ç OscUser
+		// è®¾ç½®éœ€è¦è¢«ç§»é™¤çš„è¡¨åå‰ç¼€ç”¨äºç”ŸæˆmodelNameã€‚ä¾‹å¦‚è¡¨å "osc_user"ï¼Œç§»é™¤å‰ç¼€ "osc_"åç”Ÿæˆçš„modelåä¸º "User"è€Œé OscUser
 		gernerator.setRemovedTableNamePrefixes("t_");
-		// Éú³É
+		// ç”Ÿæˆ
 		gernerator.generate();
 	}
 }
