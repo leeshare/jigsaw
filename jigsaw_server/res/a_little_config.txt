@@ -1,0 +1,4 @@
+jdbcUrl = jdbc:mysql://182.92.216.144/jigsaw?characterEncoding=utf8&zeroDateTimeBehavior=convertToNull
+user = taoke
+password = taoke@2012
+devMode = true
