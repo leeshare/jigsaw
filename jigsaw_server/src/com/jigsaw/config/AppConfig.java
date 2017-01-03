@@ -6,10 +6,16 @@ import com.jfinal.config.Interceptors;
 import com.jfinal.config.JFinalConfig;
 import com.jfinal.config.Plugins;
 import com.jfinal.config.Routes;
+import com.jfinal.kit.PropKit;
+import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
+import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.render.ViewType;
 import com.jigsaw.controller.LoginController;
+import com.jigsaw.model.SiteUser;
+import com.jigsaw.model._MappingKit;
 import com.jigsaw.routes.AdminRoutes;
 import com.jigsaw.routes.FrontRoutes;
+import com.mchange.v2.c3p0.cfg.C3P0Config;
 
 public class AppConfig extends JFinalConfig {
 
@@ -17,6 +23,7 @@ public class AppConfig extends JFinalConfig {
 	public void configConstant(Constants me) {
 		me.setDevMode(true);
 		me.setViewType(ViewType.JSP);
+		PropKit.use("a_little_config.txt");  //加载少量必要配置，随后可用 PropKit.get(...)获取
 	}
 
 	@Override
@@ -29,8 +36,18 @@ public class AppConfig extends JFinalConfig {
 
 	@Override
 	public void configPlugin(Plugins me) {
-		// TODO Auto-generated method stub
+		// 配置C3p0数据库连接池插件
+		//loadPropertyFile("a_little_config.txt");
+		C3p0Plugin c3p0Plugin = new C3p0Plugin(PropKit.get("jdbcUrl"), PropKit.get("user"), PropKit.get("password").trim());
+		me.add(c3p0Plugin);
 		
+		// 配置ActiveRecord插件
+		ActiveRecordPlugin activeRecordPlugin = new ActiveRecordPlugin(c3p0Plugin);
+		me.add(activeRecordPlugin);
+		
+		//activeRecordPlugin.addMapping("Site_User", SiteUser.class);
+		//上面的操作，都移到了 _MappingKit类中
+		_MappingKit.mapping(activeRecordPlugin);
 	}
 
 	@Override
