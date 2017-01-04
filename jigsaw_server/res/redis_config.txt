@@ -1,0 +1,4 @@
+host = 182.92.216.144
+port = 6388
+timeout = 300
+password = redisLee
