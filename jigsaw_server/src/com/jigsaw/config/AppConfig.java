@@ -12,6 +12,8 @@ import com.jfinal.plugin.c3p0.C3p0Plugin;
 import com.jfinal.plugin.redis.RedisPlugin;
 import com.jfinal.render.ViewType;
 import com.jigsaw.controller.LoginController;
+import com.jigsaw.interceptor.GlobalActionInterceptor;
+import com.jigsaw.interceptor.GlobalServiceInterceptor;
 import com.jigsaw.model._MappingKit;
 
 public class AppConfig extends JFinalConfig {
@@ -19,7 +21,7 @@ public class AppConfig extends JFinalConfig {
 	@Override
 	public void configConstant(Constants me) {
 		me.setDevMode(true);
-		me.setViewType(ViewType.JSP);
+		//me.setViewType(ViewType.JSP);
 		PropKit.use("a_little_config.txt");  //加载少量必要配置，随后可用 PropKit.get(...)获取
 	}
 
@@ -59,7 +61,8 @@ public class AppConfig extends JFinalConfig {
 	@Override
 	public void configInterceptor(Interceptors me) {
 		// TODO Auto-generated method stub
-		
+		//me.addGlobalActionInterceptor(new GlobalActionInterceptor());
+		//me.addGlobalServiceInterceptor(new GlobalServiceInterceptor());
 	}
 
 	@Override
