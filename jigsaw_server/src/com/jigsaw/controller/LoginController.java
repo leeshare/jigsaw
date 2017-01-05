@@ -36,6 +36,9 @@ public class LoginController extends Controller {
 		renderText("redisText in login2.");
 		
 		//getModel(SiteUser.class, "");
+		
+		//new SiteUser().operateUser();
+		new SiteUser().operateRecord();
 	}
 	
 	@Clear(ControllerInterceptor.class)
