@@ -9,6 +9,7 @@ import com.jfinal.config.Routes;
 import com.jfinal.kit.PropKit;
 import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 import com.jfinal.plugin.c3p0.C3p0Plugin;
+import com.jfinal.plugin.ehcache.EhCachePlugin;
 import com.jfinal.plugin.redis.RedisPlugin;
 import com.jfinal.render.ViewType;
 import com.jigsaw.controller.LoginController;
@@ -45,13 +46,20 @@ public class AppConfig extends JFinalConfig {
 		ActiveRecordPlugin activeRecordPlugin = new ActiveRecordPlugin(c3p0Plugin);
 		me.add(activeRecordPlugin);
 		
+		//activeRecordPlugin.setDialect(new PostgresqlDialect());
+		
+		me.add(new EhCachePlugin());
+		
 		String redisHost = PropKit.use("redis_config.txt").get("host");
 		//非第一次加载的配置，则需要每次通过use来制定配置文件名再取值
 		int redisPort = PropKit.use("redis_config.txt").getInt("port");
 		int redisTimeout = PropKit.use("redis_config.txt").getInt("timeout");
 		String redisPassword = PropKit.use("redis_config.txt").get("password");
-		RedisPlugin rp = new RedisPlugin("myRedis", redisHost, redisPort, redisTimeout, redisPassword);
+		RedisPlugin rp = new RedisPlugin("userRedis", redisHost, redisPort, redisTimeout, redisPassword);
 		me.add(rp);
+		
+//		RedisPlugin photoRedis = new RedisPlugin("photoRedis", "localhost");
+//		me.add(photoRedis);
 		
 		//activeRecordPlugin.addMapping("Site_User", SiteUser.class);
 		//上面的操作，都移到了 _MappingKit类中

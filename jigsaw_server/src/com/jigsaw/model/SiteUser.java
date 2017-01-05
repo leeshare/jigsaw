@@ -1,8 +1,10 @@
 package com.jigsaw.model;
 
+import java.sql.SQLException;
 import java.util.List;
 
 import com.jfinal.plugin.activerecord.Db;
+import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
 import com.jigsaw.model.base.BaseSiteUser;
@@ -17,6 +19,7 @@ public class SiteUser extends BaseSiteUser<SiteUser> {
 	
 	public String defaultPassword = "a111111";
 	
+	//通过 Model 修改/添加/删除 数据库
 	public void operateUser(){
 		String md5Pwd = Str2MD5.MD5(defaultPassword, 16);
 		dao.set("RealName", "李良").set("PassWord", md5Pwd).save();
@@ -39,15 +42,16 @@ public class SiteUser extends BaseSiteUser<SiteUser> {
 		
 	}
 	
+	//通过 Db + Record 修改/添加/删除 数据库
 	public void operateRecord(){
 		String md5Pwd = Str2MD5.MD5(defaultPassword, 16);
 		Record user = new Record().set("RealName", "James.Lee").set("PassWord", md5Pwd);
 		Db.save("Site_User", user);
 		
-		Db.deleteById("Site_User", 1894);
+		Db.deleteById("Site_User", "UserID", 1894);
 		
-		user = Db.findById("Site_User", 1895).set("LoginName", "James");
-		Db.update("Site_User", user);
+		user = Db.findById("Site_User", "UserID", 1895).set("LoginName", "James");
+		Db.update("Site_User", "UserID", user);
 		
 		String loginName = user.getStr("LoginName");
 		String passWrod = user.getStr("PassWord");
@@ -58,5 +62,27 @@ public class SiteUser extends BaseSiteUser<SiteUser> {
 		if(userPage.isFirstPage()){
 			String a = "22";
 		}
+	}
+	
+	public String operateTransaction(){
+		//事务处理
+		boolean succeed = Db.tx(new IAtom() {
+			
+			@Override
+			public boolean run() throws SQLException {
+				// 表 Site_User 的引擎是 InnoDB 才能使用事务
+				int count = Db.update("UPDATE Site_User SET LoginName = 'abcc' WHERE UserID = ?", 1895);
+				//count = 1
+				int count2 = Db.update("UPDATE Site_User SET LoginName = 'def' WHERE UserID = ?", 1894);
+				//count2 = 0
+				//如果 表Site_User 的引擎是 MyISAM 则，第一条执行成功了；第二条未找到。
+				return count == 1 && count2 == 1;
+			}
+		});
+		
+		if(succeed)
+			return "success";
+		else
+			return "failed";
 	}
 }

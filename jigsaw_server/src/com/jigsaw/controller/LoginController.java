@@ -38,7 +38,9 @@ public class LoginController extends Controller {
 		//getModel(SiteUser.class, "");
 		
 		//new SiteUser().operateUser();
-		new SiteUser().operateRecord();
+		//new SiteUser().operateRecord();
+		String result = new SiteUser().operateTransaction();
+		renderText(result);
 	}
 	
 	@Clear(ControllerInterceptor.class)
