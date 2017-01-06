@@ -10,7 +10,7 @@ public class TestRedis {
 	//web 环境下使用 RedisPlugin
 	public void redisDemo(){
 		Cache userCache = Redis.use("userRedis");
-		userCache.set("key", "value");
+		userCache.set("key", "223");
 		String value = userCache.get("key");
 		
 //		Cache photoCache = Redis.use("photoRedis");
