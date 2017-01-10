@@ -56,7 +56,7 @@ public class AppConfig extends JFinalConfig {
 		int redisPort = PropKit.use("redis_config.txt").getInt("port");
 		int redisTimeout = PropKit.use("redis_config.txt").getInt("timeout");
 		String redisPassword = PropKit.use("redis_config.txt").get("password");
-		RedisPlugin rp = new RedisPlugin("userRedis", redisHost, redisPort, redisTimeout, redisPassword);
+		RedisPlugin rp = new RedisPlugin(AppConst.PLUGIN_REDIS_USER, redisHost, redisPort, redisTimeout, redisPassword);
 		me.add(rp);
 		
 //		RedisPlugin photoRedis = new RedisPlugin("photoRedis", "localhost");
