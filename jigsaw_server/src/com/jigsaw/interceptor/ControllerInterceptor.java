@@ -32,7 +32,7 @@ public class ControllerInterceptor implements Interceptor {
 		token = token.split(",")[0];
 		
 		Cache userCache = Redis.use(AppConst.PLUGIN_REDIS_USER);
-		byte[] ticketValue = userCache.get( FstSerializer.me.fieldToBytes(AppConst.REDIS_KEY_TICKET + token) );
+		byte[] ticketValue = userCache.get(AppConst.REDIS_KEY_TICKET + token);
 		Object ticketObj = FstSerializer.me.valueFromBytes(ticketValue);
 		
 		PassportTicket ticket = null;
@@ -41,7 +41,7 @@ public class ControllerInterceptor implements Interceptor {
 		}else {
 			ticket = PassportTicket.dao.findById(token);
 			if(ticket != null){
-				userCache.set( FstSerializer.me.fieldToBytes(AppConst.REDIS_KEY_TICKET + token), FstSerializer.me.valueToBytes(ticket) );
+				userCache.set( AppConst.REDIS_KEY_TICKET + token, FstSerializer.me.valueToBytes(ticket) );
 			}else
 				return null;
 		}
