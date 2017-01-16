@@ -16,7 +16,7 @@ public class ControllerInterceptor implements Interceptor {
 		
 		getArgs(inv);
 		
-		System.out.println("类拦截器");
+		System.out.println("类拦截器" + inv.getControllerKey());
 		System.out.println("Before method invoking");
 		inv.invoke();
 		System.out.println("After method invoking");
@@ -25,7 +25,7 @@ public class ControllerInterceptor implements Interceptor {
 	private PassportTicket getArgs(Invocation inv){
 		//Object[] args = inv.getArgs();
 		String token = inv.getController().getPara("token");
-		if (token.equals(null) || token.isEmpty())
+		if (token == null || token.isEmpty())
         {
             return null;
         }
@@ -38,7 +38,7 @@ public class ControllerInterceptor implements Interceptor {
 		PassportTicket ticket = null;
 		if(ticketObj != null){
 			ticket = (PassportTicket)ticketObj;
-		}else {
+		} else {
 			ticket = PassportTicket.dao.findById(token);
 			if(ticket != null){
 				userCache.set( AppConst.REDIS_KEY_TICKET + token, FstSerializer.me.valueToBytes(ticket) );

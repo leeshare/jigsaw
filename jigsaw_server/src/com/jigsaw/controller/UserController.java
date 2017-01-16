@@ -1,6 +1,7 @@
 package com.jigsaw.controller;
 
 import com.jfinal.aop.Before;
+import com.jfinal.aop.Clear;
 import com.jfinal.core.ActionKey;
 import com.jfinal.core.Controller;
 import com.jfinal.plugin.redis.Cache;
@@ -12,9 +13,10 @@ import com.jigsaw.interceptor.ControllerInterceptor;
 @Before(ControllerInterceptor.class)
 public class UserController extends Controller {
 
+	@Clear
 	@ActionKey("/login")
 	public void index(){
-		
+		System.out.println("/login");
 		
 		 renderJson("{\"message\":\"Please input password!\"}");
 	}
