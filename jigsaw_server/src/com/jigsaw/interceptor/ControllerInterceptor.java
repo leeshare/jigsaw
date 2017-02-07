@@ -16,8 +16,6 @@ import com.jigsaw.model.UserContext;
 ///控制器 拦截器
 public class ControllerInterceptor implements Interceptor {
 
-	public static Set<UserContext> currents = new HashSet<UserContext>();
-	
 	@Override
 	public void intercept(Invocation inv) {
 		
