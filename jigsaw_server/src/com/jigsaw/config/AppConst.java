@@ -6,5 +6,9 @@ public class AppConst {
 	public static final String PLUGIN_REDIS_USER = "userRedis";
 	
 	public static final String REDIS_KEY_TICKET = "ticket:";
+
+	public static final String REDIS_KEY_SIGNIN = "signin:";
+	
+	public static final String REDIS_KEY_CURRENTUSER = "currentuser:";
 	
 }

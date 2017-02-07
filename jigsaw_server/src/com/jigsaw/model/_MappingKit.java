@@ -16,6 +16,7 @@ import com.jfinal.plugin.activerecord.ActiveRecordPlugin;
 public class _MappingKit {
 
 	public static void mapping(ActiveRecordPlugin arp) {
+		arp.addMapping("Passport_Signin_Info", "SIGNIN_ID", PassportSigninInfo.class);
 		arp.addMapping("Passport_Ticket", "APP_SIGNIN_ID", PassportTicket.class);
 		arp.addMapping("Site_User", "UserID", SiteUser.class);
 	}

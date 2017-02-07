@@ -13,4 +13,12 @@ public class PassportTicket extends BasePassportTicket<PassportTicket> {
 		return dao.findById(token);
 		
 	}
+	
+	public String AppEnvironment;
+	public java.lang.String getAppEnvironment() {
+		return AppEnvironment;
+	}
+	public void setAppEnvironment(java.lang.String appEnvironment) {
+		AppEnvironment = appEnvironment;
+	}
 }

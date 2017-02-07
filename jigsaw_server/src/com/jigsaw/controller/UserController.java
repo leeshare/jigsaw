@@ -13,7 +13,7 @@ import com.jigsaw.interceptor.ControllerInterceptor;
 @Before(ControllerInterceptor.class)
 public class UserController extends Controller {
 
-	@Clear
+	//@Clear
 	@ActionKey("/login")
 	public void index(){
 		System.out.println("/login");
