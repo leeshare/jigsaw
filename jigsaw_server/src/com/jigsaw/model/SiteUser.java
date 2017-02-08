@@ -1,12 +1,16 @@
 package com.jigsaw.model;
 
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
+
+import javax.servlet.http.HttpServletRequest;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
 import com.jfinal.plugin.activerecord.Page;
 import com.jfinal.plugin.activerecord.Record;
+import com.jigsaw.config.AppConst;
 import com.jigsaw.model.base.BaseSiteUser;
 import com.jigsaw.tool.Str2MD5;
 
@@ -17,10 +21,13 @@ import com.jigsaw.tool.Str2MD5;
 public class SiteUser extends BaseSiteUser<SiteUser> {
 	public static final SiteUser dao = new SiteUser();
 	
-	public String defaultPassword = "a111111";
+	public String currentLoginName = "";
+	public String authServer = "";
+	
+	private String defaultPassword = "a111111";
 	
 	//通过 Model 修改/添加/删除 数据库
-	public void operateUser(){
+	public void testOperateUser(){
 		String md5Pwd = Str2MD5.MD5(defaultPassword, 16);
 		dao.set("RealName", "李良").set("PassWord", md5Pwd).save();
 		
@@ -43,7 +50,7 @@ public class SiteUser extends BaseSiteUser<SiteUser> {
 	}
 	
 	//通过 Db + Record 修改/添加/删除 数据库
-	public void operateRecord(){
+	public void testOperateRecord(){
 		String md5Pwd = Str2MD5.MD5(defaultPassword, 16);
 		Record user = new Record().set("RealName", "James.Lee").set("PassWord", md5Pwd);
 		Db.save("Site_User", user);
@@ -64,7 +71,7 @@ public class SiteUser extends BaseSiteUser<SiteUser> {
 		}
 	}
 	
-	public String operateTransaction(){
+	public String testOperateTransaction(){
 		//事务处理
 		boolean succeed = Db.tx(new IAtom() {
 			
@@ -84,5 +91,30 @@ public class SiteUser extends BaseSiteUser<SiteUser> {
 			return "success";
 		else
 			return "failed";
+	}
+	
+	public SiteUser signIn(String loginName, String password){
+		String sql = String.format("SELECT * FROM Site_User WHERE Status = 1 AND (LoginName = '%s' OR MobilePhone = '%s' OR Email = '%s')", loginName, loginName, loginName);
+		List<SiteUser> users = dao.find(sql);
+		if(users.size() >= 1){
+			SiteUser user = users.get(0);
+			
+			boolean isFailedLock = false;
+			PassportUseraccesslog log = (new PassportUseraccesslog()).getAccessLog(user.getUserID());
+			if(log != null && log.getFailedPasswordAttemptCount() > 0){
+				Date now = new Date();
+				if(log.getFailedPasswordAttemptCount() > AppConst.LOGIN_FAIL_PWD_MAX_TIME
+						&& ((new Date()).getTime() - log.getFailedPasswordAttemptStart().getTime())/(1000*60) <= AppConst.LOGIN_FAIL_PWD_LOCK_PERIOD){
+					isFailedLock = true;
+				}
+			}
+			
+			String pwd = Str2MD5.MD5(password, 16);
+			if(user.getPassWord().equals(pwd)){
+				
+				
+			}
+		}
+		return null;
 	}
 }

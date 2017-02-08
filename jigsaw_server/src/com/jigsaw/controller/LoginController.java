@@ -39,8 +39,8 @@ public class LoginController extends Controller {
 		
 		//new SiteUser().operateUser();
 		//new SiteUser().operateRecord();
-		String result = new SiteUser().operateTransaction();
-		renderText(result);
+		//String result = new SiteUser().operateTransaction();
+		//renderText(result);
 	}
 	
 	@Clear(ControllerInterceptor.class)

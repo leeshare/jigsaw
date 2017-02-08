@@ -4,6 +4,10 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.logging.SimpleFormatter;
 
+import javax.servlet.http.HttpServletRequest;
+
+import org.eclipse.jetty.server.handler.ContextHandler;
+
 import com.jfinal.aop.Before;
 import com.jfinal.aop.Clear;
 import com.jfinal.core.ActionKey;
@@ -13,17 +17,41 @@ import com.jfinal.plugin.redis.Redis;
 import com.jigsaw.config.AppConfig;
 import com.jigsaw.config.AppConst;
 import com.jigsaw.interceptor.ControllerInterceptor;
+import com.jigsaw.model.PassportSigninInfo;
+import com.jigsaw.model.PassportTicket;
+import com.jigsaw.model.SiteUser;
 import com.jigsaw.model.UserContextList;
+import com.jigsaw.validator.UserValidator;
 
 @Before(ControllerInterceptor.class)
 public class UserController extends Controller {
 
 	//@Clear
 	@ActionKey("/login")
+	//@Before(UserValidator.class)
 	public void index(){
 		System.out.println("/login");
-		
-		 renderJson("{\"message\":\"Please input password!\"}");
+		String loginName = getPara("loginname"); 
+	    String password = getPara("password");
+	    if(loginName == null || password == null || loginName.equals("") || password.equals("")){
+	    	renderJson("{\"message\":\"请输入用户名和密码!\"}");
+	    	//return;
+	    }
+	    loginName = "sysadmin";
+	    password = "a111111";
+	    
+	    HttpServletRequest request = this.getRequest();
+	    
+	    SiteUser user = (new SiteUser()).signIn(loginName, password);
+		user.currentLoginName = loginName;
+	    user.authServer = request.getRemoteHost() + ":" + request.getRemotePort();
+	    PassportSigninInfo signin = (new PassportSigninInfo()).persistentSignIn(user, true, false);
+	    PassportTicket ticket = (new PassportTicket()).persistentTicket(signin, request);
+	    if(user == null)
+	    	renderJson("{\"message\":\"用户名或密码不正确!\"}");
+	    else {
+	    	renderJson(user);
+	    }
 	}
 	
 	@ActionKey("/auth")
