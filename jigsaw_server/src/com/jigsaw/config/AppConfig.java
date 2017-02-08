@@ -13,6 +13,7 @@ import com.jfinal.plugin.redis.RedisPlugin;
 import com.jfinal.render.ViewType;
 import com.jigsaw.controller.LoginController;
 import com.jigsaw.controller.UserController;
+import com.jigsaw.interceptor.ExceptionInterceptor;
 import com.jigsaw.interceptor.GlobalActionInterceptor;
 import com.jigsaw.interceptor.GlobalServiceInterceptor;
 import com.jigsaw.model._MappingKit;
@@ -72,6 +73,7 @@ public class AppConfig extends JFinalConfig {
 		// TODO Auto-generated method stub
 		//me.addGlobalActionInterceptor(new GlobalActionInterceptor());
 		//me.addGlobalServiceInterceptor(new GlobalServiceInterceptor());
+		me.add(new ExceptionInterceptor());
 	}
 
 	@Override

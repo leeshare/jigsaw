@@ -1,8 +1,10 @@
 package com.jigsaw.model;
 
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 import com.jfinal.plugin.activerecord.Db;
 import com.jfinal.plugin.activerecord.IAtom;
@@ -23,23 +25,43 @@ public class PassportUseraccesslog extends BasePassportUseraccesslog<PassportUse
 		return null;
 	}
 	
-	public boolean saveAccessLog(int userId){
+	public void saveAccessFailLog(int userId){
 		boolean succeed = Db.tx(new IAtom() {
 			
 			@Override
 			public boolean run() throws SQLException {
-				List<Record> lst = Db.find("SELECT * FROM Passport_UserAccessLog WHERE UserID = ?", userId);
-				if(lst.size() > 0){
-					Record log = lst.get(0);
-					Date lastLoginDate = log.getDate("LastLoginDate");
-					int failCount = log.getInt("FailedPasswordAttemptCount");
-					Date fail = log.getDate("FailedPasswordAttemptStart");
+				String sql = String.format("UPDATE Passport_UserAccessLog SET FailedPasswordAttemptStart = '%s', FailedPasswordAttemptCount=1 WHERE UserID = %d and FailedPasswordAttemptStart IS NULL", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), userId);
+				int count = Db.update(sql);
+				if(count == 0){
+					sql = String.format("UPDATE Passport_UserAccessLog SET FailedPasswordAttemptCount = FailedPasswordAttemptCount+1 WHERE UserID = %d", userId);
+					count = Db.update(sql);
+					if(count == 0){
+						Record log = new Record().set("AccessLogID", UUID.randomUUID()).set("UserID", userId).set("FailedPasswordAttemptCount", 1).set("FailedPasswordAttemptStart", new Date());
+						Db.save("Passport_UserAccessLog", log);
+					}
 				}
-				
-				return false;
+				return true;
 			}
 		});
 		
-		return succeed;
+		return;
+	}
+	
+	public void saveAccessSucceedLog(int userId){
+		boolean succeed = Db.tx(new IAtom() {
+			
+			@Override
+			public boolean run() throws SQLException {
+				String sql = String.format("UPDATE Passport_UserAccessLog SET FailedPasswordAttemptStart = NULL, FailedPasswordAttemptCount = 0, LastLoginDate = '%s' WHERE UserID = %d", new SimpleDateFormat("yyyy-MM-dd HH:mm:ss").format(new Date()), userId);
+				int count = Db.update(sql);
+				if(count == 0){
+					Record log = new Record().set("AccessLogID", UUID.randomUUID()).set("UserID", userId).set("FailedPasswordAttemptCount", 0).set("LastLoginDate", new Date());
+					Db.save("Passport_UserAccessLog", log);
+				}
+				return true;
+			}
+		});
+		
+		return;
 	}
 }

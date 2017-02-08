@@ -22,6 +22,7 @@ import com.jigsaw.model.PassportTicket;
 import com.jigsaw.model.SiteUser;
 import com.jigsaw.model.UserContextList;
 import com.jigsaw.validator.UserValidator;
+import com.mysql.jdbc.StringUtils;
 
 @Before(ControllerInterceptor.class)
 public class UserController extends Controller {
@@ -33,7 +34,8 @@ public class UserController extends Controller {
 		System.out.println("/login");
 		String loginName = getPara("loginname"); 
 	    String password = getPara("password");
-	    if(loginName == null || password == null || loginName.equals("") || password.equals("")){
+	    if(StringUtils.isNullOrEmpty(loginName) || StringUtils.isNullOrEmpty(password)){
+	    	//throw new
 	    	renderJson("{\"message\":\"请输入用户名和密码!\"}");
 	    	//return;
 	    }

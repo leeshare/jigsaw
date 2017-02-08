@@ -94,7 +94,7 @@ public class SiteUser extends BaseSiteUser<SiteUser> {
 	}
 	
 	public SiteUser signIn(String loginName, String password){
-		String sql = String.format("SELECT * FROM Site_User WHERE Status = 1 AND (LoginName = '%s' OR MobilePhone = '%s' OR Email = '%s')", loginName, loginName, loginName);
+		String sql = String.format("SELECT * FROM Site_User WHERE (LoginName = '%s' OR MobilePhone = '%s' OR Email = '%s')", loginName, loginName, loginName);
 		List<SiteUser> users = dao.find(sql);
 		if(users.size() >= 1){
 			SiteUser user = users.get(0);
@@ -111,8 +111,22 @@ public class SiteUser extends BaseSiteUser<SiteUser> {
 			
 			String pwd = Str2MD5.MD5(password, 16);
 			if(user.getPassWord().equals(pwd)){
-				
-				
+				if(user.getStatus() == 0){
+					//抛出用户状态异常
+					//throw
+				}else {
+					(new PassportUseraccesslog()).dao.saveAccessSucceedLog(user.getUserID());
+					return user;
+				}
+			}else {
+				if(!isFailedLock){
+					(new PassportUseraccesslog()).dao.saveAccessFailLog(user.getUserID());
+					//用户名或密码错误
+					//throw
+				}else {
+					//超过：规定的时间内尝试过多次数
+					//throw new Exception();
+				}
 			}
 		}
 		return null;
