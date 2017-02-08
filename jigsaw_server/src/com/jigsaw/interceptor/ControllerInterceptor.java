@@ -12,6 +12,7 @@ import com.jigsaw.config.AppConst;
 import com.jigsaw.model.PassportSigninInfo;
 import com.jigsaw.model.PassportTicket;
 import com.jigsaw.model.UserContext;
+import com.jigsaw.model.UserContextList;
 
 ///控制器 拦截器
 public class ControllerInterceptor implements Interceptor {
@@ -75,21 +76,23 @@ public class ControllerInterceptor implements Interceptor {
 		if(ticket != null){
 			PassportSigninInfo signin = getSigninInfoById(ticket.getSigninId());
 			if(signin != null){
-				for(UserContext c : currents){
-					if(c.UserID == signin.getUserId()){
-						UserContext.CurrentUser = c;
-						break;
-					}
-				}
+//				for(UserContext c : UserContextList.currents){
+//					if(c.UserID == signin.getUserId()){
+//						UserContext.CurrentUser = c;
+//						break;
+//					}
+//				}
 				
 				UserContext currentUser = new UserContext();
 				currentUser.SigninID= ticket.getAppSigninId();
-				currentUser.UserID = signin.getUserId();
+				currentUser.UserID = Integer.parseInt(signin.getUserId());
 				currentUser.UserName = signin.getUserName();
 				currentUser.OrganizationID = ticket.getAppEnvironment() == null || ticket.getAppEnvironment().equals("") ? 0 : Integer.parseInt(ticket.getAppEnvironment());
 				currentUser.AppCode = "";
 				currentUser.IP = ticket.getAppSigninIp();
-				currents.add(currentUser);
+				//UserContextList.currents.add(currentUser);
+				
+				UserContextList.setCurrent(currentUser);
 			}
 		}
 		
